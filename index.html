@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DREAM STATE | Premium Sleepwear</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+      color: #ffffff; 
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
+
+    /* Floating Cart Indicator */
+    .cart-trigger {
+      position: fixed; bottom: 30px; right: 30px; background: #ff3e3e;
+      color: white; width: 65px; height: 65px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer; z-index: 999; box-shadow: 0 10px 25px rgba(255, 62, 62, 0.5);
+    }
+    
+    .cart-count {
+      position: absolute; top: -5px; right: -5px; background: white;
+      color: black; font-size: 0.8rem; font-weight: bold; width: 26px;
+      height: 26px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    }
+
+    header { text-align: center; padding: 60px 0 30px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff; letter-spacing: -1px; }
+    .tagline { font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: #ff3e3e; }
+
+    /* Product Grid */
+    .products { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 100px; }
+    .product-card { 
+      background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); 
+      padding: 15px; position: relative;
+    }
+
+    .img-box { aspect-ratio: 1/1.1; overflow: hidden; margin-bottom: 15px; background: #000; }
+    .img-box img { width: 200%; height: 200%; object-fit: cover; opacity: 0.8; }
+
+    .p1 img { object-position: 0% 0%; } .p2 img { object-position: 100% 0%; }
+    .p3 img { object-position: 0% 100%; } .p4 img { object-position: 100% 100%; }
+
+    .product-title { font-size: 0.85rem; margin-bottom: 5px; color: #bbb; }
+    .price-tag { color: #fff; font-weight: 600; font-size: 0.95rem; margin-bottom: 15px; }
+
+    /* BIGGER Quantity Controls */
+    .qty-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #000; border: 1px solid #444; 
+      height: 55px; /* Increased height */
+    }
+    .qty-btn {
+      background: none; border: none; color: white; 
+      width: 50px; height: 100%;
+      cursor: pointer; font-size: 1.5rem; /* Larger icon */
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .qty-btn:active { background: #1a1a1a; color: #ff3e3e; }
+
+    .qty-input {
+      width: 50px; text-align: center; background: none; border: none;
+      color: #ff3e3e; font-family: 'Inter'; font-weight: 700; 
+      font-size: 1.4rem; /* Significantly larger number */
+    }
+
+    /* Modal Styling */
+    #cart-modal { 
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.96); z-index: 1000; justify-content: center; align-items: center; 
+      backdrop-filter: blur(12px);
+    }
+    .cart-content { width: 95%; max-width: 420px; background: #0a0a0a; padding: 25px; border: 1px solid #222; }
+    .cart-items-list { max-height: 180px; overflow-y: auto; margin: 15px 0; border-top: 1px solid #222; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #111; font-size: 0.9rem; }
+    
+    .total-section { 
+      padding: 15px 0; border-top: 2px solid #333; margin-top: 5px;
+      display: flex; justify-content: space-between; font-weight: 600; font-size: 1.2rem;
+    }
+
+    input, select { 
+      width: 100%; padding: 16px; margin-bottom: 10px; background: #111; 
+      border: 1px solid #333; color: white; outline: none; font-size: 1rem; 
+    }
+    select { color: #ff3e3e; font-weight: 600; text-align: center; }
+
+    .checkout-btn { 
+      width: 100%; padding: 20px; background: #ff3e3e; color: white; border: none; 
+      font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
+    }
+
+    .close-link { text-align: center; margin-top: 20px; font-size: 0.65rem; color: #555; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+<div class="cart-trigger" onclick="toggleCart()">
+  <span>🛒</span>
+  <div class="cart-count" id="cart-counter">0</div>
+</div>
+
+<header>
+  <h1>DREAM STATE</h1>
+  <p class="tagline">Bold by design • Quiet by night</p>
+</header>
+
+<div class="container">
+  <div class="products">
+    <div class="product-card">
+      <div class="img-box p1"><img src="https://image_generation_content.s3.amazonaws.com/0.png" alt="White Plaid"></div>
+      <p class="product-title">White Plaid Lounge</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('White Plaid Lounge', 25000, 'qty1', -1)">-</button>
+        <input type="number" class="qty-input" id="qty1" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('White Plaid Lounge', 25000, 'qty1', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box p2"><img src="https://image_generation_content.s3.amazonaws.com/0.png" alt="Red Set"></div>
+      <p class="product-title">Classic Red Set</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('Classic Red Set', 25000, 'qty2', -1)">-</button>
+        <input type="number" class="qty-input" id="qty2" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('Classic Red Set', 25000, 'qty2', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box p3"><img src="https://image_generation_content.s3.amazonaws.com/0.png" alt="White PJ"></div>
+      <p class="product-title">White Pajama Set</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('White Pajama Set', 25000, 'qty3', -1)">-</button>
+        <input type="number" class="qty-input" id="qty3" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('White Pajama Set', 25000, 'qty3', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box p4"><img src="https://image_generation_content.s3.amazonaws.com/0.png" alt="Red Pants"></div>
+      <p class="product-title">Red Plaid Pants</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('Red Plaid Pants', 25000, 'qty4', -1)">-</button>
+        <input type="number" class="qty-input" id="qty4" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('Red Plaid Pants', 25000, 'qty4', 1)">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cart-modal">
+  <div class="cart-content">
+    <h3 style="letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px;">Order Summary</h3>
+    
+    <div id="cart-items-display" class="cart-items-list"></div>
+    
+    <div id="checkout-form" style="display: none;">
+      <div class="total-section">
+        <span>Total Payable:</span>
+        <span id="cart-total" style="color: #ff3e3e;">0</span><span style="font-size: 0.8rem; margin-left: 5px;">UGX</span>
+      </div>
+
+      <select id="order-size">
+        <option value="" disabled selected>— CHOOSE YOUR SIZE —</option>
+        <option value="S">Small (S)</option>
+        <option value="M">Medium (M)</option>
+        <option value="L">Large (L)</option>
+        <option value="XL">Extra Large (XL)</option>
+      </select>
+
+      <input type="email" id="email" placeholder="Email Address">
+      <input type="tel" id="phone" placeholder="WhatsApp / Mobile Money Number">
+      
+      <button class="checkout-btn" id="loc-btn" onclick="getLocation()" style="background: #1a1a1a; border: 1px solid #333; margin-bottom: 10px; font-size: 0.75rem; letter-spacing: 1px;">📍 Pin Delivery Location</button>
+      <button class="checkout-btn" onclick="submitOrder()">Submit via WhatsApp</button>
+    </div>
+    
+    <p class="close-link" onclick="toggleCart()">[ Back to Products ]</p>
+  </div>
+</div>
+
+<script>
+  let cart = [];
+  let userLocation = "Not provided";
+  const myWhatsAppNumber = "256775418629";
+
+  function updateQty(name, price, qtyInputId, delta) {
+    const input = document.getElementById(qtyInputId);
+    let newVal = parseInt(input.value) + delta;
+    if (newVal < 0) newVal = 0;
+    input.value = newVal;
+
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (newVal > 0) {
+      if (itemIndex > -1) cart[itemIndex].qty = newVal;
+      else cart.push({ name, price, qty: newVal });
+    } else {
+      if (itemIndex > -1) cart.splice(itemIndex, 1);
+    }
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const display = document.getElementById('cart-items-display');
+    const counter = document.getElementById('cart-counter');
+    const form = document.getElementById('checkout-form');
+    let total = 0; let count = 0;
+    
+    if (cart.length === 0) {
+      display.innerHTML = '<p style="color:#555; text-align:center; padding: 20px;">Your cart is empty.</p>';
+      form.style.display = 'none';
+    } else {
+      display.innerHTML = '';
+      cart.forEach((item) => {
+        let subtotal = item.price * item.qty;
+        total += subtotal;
+        count += item.qty;
+        display.innerHTML += `
+          <div class="cart-item">
+            <span>${item.name} <b style="color:#ff3e3e">x${item.qty}</b></span>
+            <span style="font-weight:600;">${subtotal.toLocaleString()} UGX</span>
+          </div>`;
+      });
+      form.style.display = 'block';
+      document.getElementById('cart-total').innerText = total.toLocaleString();
+    }
+    counter.innerText = count;
+  }
+
+  function toggleCart() {
+    const modal = document.getElementById('cart-modal');
+    modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+  }
+
+  function getLocation() {
+    const btn = document.getElementById('loc-btn');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        userLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+        btn.innerText = "✅ Location Locked";
+        btn.style.color = "#28a745";
+      }, () => {
+        alert("Please allow location access to pin your delivery spot.");
+      });
+    }
+  }
+
+  function submitOrder() {
+    const size = document.getElementById('order-size').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const total = document.getElementById('cart-total').innerText;
+
+    if(!size || !email || !phone) { alert("Please complete size and contact info."); return; }
+    
+    let itemDetails = cart.map(i => `- ${i.name} (x${i.qty})`).join('%0A');
+    const msg = `*DREAM STATE ORDER*%0A%0A*Items:*%0A${itemDetails}%0A%0A*Size:* ${size}%0A*Total:* ${total} UGX%0A*Contact:* ${email}%0A*Phone:* ${phone}%0A📍 *Map:* ${userLocation}`;
+    
+    window.location.href = `https://wa.me/${myWhatsAppNumber}?text=${msg}`;
+  }
+</script>
+</body>
+</html>
