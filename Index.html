@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DREAM STATE | Ultra-Premium Sleepwear</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@200;300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #000000; 
+      color: #ffffff; 
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* FIXED BIBLE VERSE: Moved to the very top edge */
+    .bible-verse {
+      position: absolute;
+      top: 20px; 
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      text-align: center;
+      color: #444444; 
+      font-size: 9px; 
+      font-weight: 300;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      z-index: 3;
+    }
+
+    .hero-video-container {
+      position: relative;
+      height: 50vh; /* Increased height for better vertical balance */
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-top: 80px; /* More space between verse and title */
+    }
+
+    .hero-content h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      letter-spacing: 12px;
+      margin-bottom: 5px;
+    }
+
+    .gold-text {
+      color: #d4af37;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 40px 0 30px; 
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-style: italic;
+      position: relative;
+    }
+
+    .products { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+      gap: 30px; 
+      margin-bottom: 60px;
+    }
+
+    .product-card { 
+      background: rgba(255,255,255,0.02);
+      padding: 15px; 
+      border: 1px solid rgba(212, 175, 55, 0.1); 
+      transition: 0.4s;
+      text-align: center;
+    }
+    
+    .product-card:hover {
+      border-color: #d4af37;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+    }
+    
+    .img-box { 
+      aspect-ratio: 1/1; 
+      overflow: hidden; 
+      margin-bottom: 15px; 
+      background: #000;
+    }
+    .img-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.8s; }
+    .product-card:hover img { opacity: 1; transform: scale(1.05); }
+
+    .product-title { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+    .price-tag { color: #d4af37; font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; }
+
+    .qty-controls {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .qty-btn { 
+      background: none; border: 1px solid #333; color: white; 
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem;
+    }
+    .qty-input { width: 25px; text-align: center; background: none; border: none; color: white; font-size: 0.9rem; }
+
+    #cart-sidebar { 
+      position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; 
+      height: 100%; background: #080808; z-index: 1000; 
+      transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+      padding: 30px; border-left: 1px solid #d4af3733;
+      display: flex; flex-direction: column;
+    }
+    #cart-sidebar.active { right: 0; }
+
+    .sidebar-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+      z-index: 999; display: none;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    .cart-input, select, textarea {
+      width: 100%; background: #111; border: 1px solid #222; 
+      padding: 12px; color: white; margin-top: 10px; font-size: 0.85rem;
+    }
+
+    .payment-btn { 
+      width: 100%; padding: 18px; background: #d4af37; color: black; border: none; 
+      font-weight: 700; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; margin-top: 15px;
+    }
+
+    .cart-trigger {
+      position: fixed; bottom: 30px; right: 30px; background: #d4af37;
+      color: black; width: 55px; height: 55px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer; z-index: 99; transition: 0.3s;
+    }
+    .cart-count { position: absolute; top: 0; right: 0; background: white; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+    footer { text-align: center; padding: 60px 0; opacity: 0.3; font-size: 0.6rem; letter-spacing: 3px; }
+
+  </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="overlay" onclick="toggleCart()"></div>
+
+<div class="cart-trigger" onclick="toggleCart()">
+  <span style="font-size: 1.2rem;">🛒</span>
+  <div class="cart-count" id="cart-counter">0</div>
+</div>
+
+<div id="cart-sidebar">
+  <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2 style="font-family: 'Cinzel'; font-size: 1rem; letter-spacing: 2px;">YOUR SELECTION</h2>
+    <span style="cursor:pointer; font-size: 0.7rem; opacity: 0.5;" onclick="toggleCart()">CLOSE ✕</span>
+  </div>
+  <div id="cart-items-display" style="flex-grow: 1; overflow-y: auto;"></div>
+  <div id="checkout-form-container" style="display: none; border-top: 1px solid #222; padding-top: 20px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+      <span style="font-family: 'Cinzel';">TOTAL</span>
+      <span id="cart-total" style="color: #d4af37; font-weight: bold;">0 UGX</span>
+    </div>
+    <select id="order-size">
+        <option value="" disabled selected>SELECT SIZE</option>
+        <option>S</option><option>M</option><option>L</option><option>XL</option>
+    </select>
+    <input type="tel" id="momo-number" class="cart-input" placeholder="WHATSAPP NUMBER / MOBILE NUMBER">
+    <textarea id="manual-address" placeholder="DELIVERY ADDRESS"></textarea>
+    <div style="margin-top: 15px;">
+        <button type="button" onclick="getLocation()" id="location-btn" style="width: 100%; padding: 10px; background: none; border: 1px solid #d4af37; color: #d4af37; font-size: 0.7rem; cursor: pointer; letter-spacing: 1px;">📍 PIN MY EXACT LOCATION</button>
+        <p id="location-status" style="font-size: 0.6rem; color: #888; margin-top: 5px; text-align: center;"></p>
+        <input type="hidden" id="coords-link">
+    </div>
+    <button class="payment-btn" onclick="initiateMomo()">Confirm Order</button>
+  </div>
+</div>
+
+<section class="hero-video-container">
+  <h6 class="bible-verse">"I will both lie down in peace, and sleep; For You alone, O Lord, make me dwell in safety." — Psalm 4:8</h6>
+  <div class="hero-content">
+    <p class="gold-text">✦ Established 2025 ✦</p>
+    <h1>DREAM STATE</h1>
+    <p style="letter-spacing: 10px; font-weight: 200; opacity: 0.6; font-size: 0.6rem;">ULTRA-PREMIUM SLEEPWEAR</p>
+  </div>
+</section>
+
+<div class="container">
+  <h2 class="section-title">The Collection</h2>
+  
+  <div class="products">
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/YCyNbtcZ/773379858d28da59d36813fca43cc980.jpg"></div>
+      <p class="product-title">MIDNIGHT LACE™ SLIP</p>
+      <p class="price-tag">20,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('MIDNIGHT LACE™ SLIP', 20000, 'qty_new', -1)">−</button>
+        <input type="number" class="qty-input" id="qty_new" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('MIDNIGHT LACE™ SLIP', 20000, 'qty_new', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/mDZ9z8rb/a4f2035f8deb50ea31017fd1ff8440cb.jpg"></div>
+      <p class="product-title">SCARLET SILK</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('SCARLET SILK', 25000, 'qty1', -1)">−</button>
+        <input type="number" class="qty-input" id="qty1" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('SCARLET SILK', 25000, 'qty1', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/FRFSdDHw/d051ff4f558f55bfc1ac89259c382b80.jpg"></div>
+      <p class="product-title">AFTER DARK™ PYJAMA SET</p>
+      <p class="price-tag">35,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('AFTER DARK™ PYJAMA SET', 35000, 'qty2', -1)">−</button>
+        <input type="number" class="qty-input" id="qty2" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('AFTER DARK™ PYJAMA SET', 35000, 'qty2', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/C1vqjkR9/d85cbfcf8f87290b8f3d3aecf8468bcb.jpg"></div>
+      <p class="product-title">Shadow Check™ Sleepwear</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('Shadow Check™ Sleepwear', 25000, 'qty3', -1)">−</button>
+        <input type="number" class="qty-input" id="qty3" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('Shadow Check™ Sleepwear', 25000, 'qty3', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/BQjxBYB0/66ba2a03947d98deee65607734181e5e.jpg"></div>
+      <p class="product-title">RED GRID™ LOUNGE PANTS</p>
+      <p class="price-tag">25,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('RED GRID™ LOUNGE PANTS', 25000, 'qty4', -1)">−</button>
+        <input type="number" class="qty-input" id="qty4" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('RED GRID™ LOUNGE PANTS', 25000, 'qty4', 1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="img-box"><img src="https://i.postimg.cc/y8rhv7q5/5708e5d8a8dde6c552593fb4c9934eb7.jpg"></div>
+      <p class="product-title">STARLIGHT SATIN ROBE</p>
+      <p class="price-tag">20,000 UGX</p>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="updateQty('STARLIGHT SATIN ROBE', 20000, 'qty_robe', -1)">−</button>
+        <input type="number" class="qty-input" id="qty_robe" value="0" readonly>
+        <button class="qty-btn" onclick="updateQty('STARLIGHT SATIN ROBE', 20000, 'qty_robe', 1)">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>DREAM STATE • KAMPALA • UGANDA BY KAMARA MATTHEW</footer>
+
+<script>
+  let cart = [];
+  const myWhatsAppNumber = "256775418629";
+
+  function updateQty(name, price, qtyInputId, delta) {
+    const input = document.getElementById(qtyInputId);
+    let newVal = Math.max(0, parseInt(input.value) + delta);
+    input.value = newVal;
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (newVal > 0) {
+      if (itemIndex > -1) cart[itemIndex].qty = newVal;
+      else cart.push({ name, price, qty: newVal });
+    } else if (itemIndex > -1) cart.splice(itemIndex, 1);
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const display = document.getElementById('cart-items-display');
+    const counter = document.getElementById('cart-counter');
+    const formContainer = document.getElementById('checkout-form-container');
+    let total = 0; let count = 0;
+    
+    if (cart.length === 0) {
+      display.innerHTML = '<p style="color:#444; text-align:center; margin-top:50px; font-size:0.7rem; letter-spacing:2px;">EMPTY</p>';
+      formContainer.style.display = 'none';
+    } else {
+      display.innerHTML = '';
+      cart.forEach((item) => {
+        total += item.price * item.qty; count += item.qty;
+        display.innerHTML += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #111; font-size:0.8rem;">
+          <span>${item.name} (x${item.qty})</span>
+          <span>${(item.price * item.qty).toLocaleString()}</span>
+        </div>`;
+      });
+      formContainer.style.display = 'block';
+      document.getElementById('cart-total').innerText = total.toLocaleString() + ' UGX';
+    }
+    counter.innerText = count;
+  }
+
+  function toggleCart() {
+    document.getElementById('cart-sidebar').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+  }
+
+  function getLocation() {
+    const status = document.getElementById('location-status');
+    if (navigator.geolocation) {
+      status.innerText = "Accessing GPS...";
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          document.getElementById('coords-link').value = `https://www.google.com/maps?q=${lat},${lon}`;
+          status.innerText = "Location Pinned ✓";
+          status.style.color = "#d4af37";
+        },
+        () => {
+          status.innerText = "Location denied. Please type address manually.";
+          status.style.color = "#ff4444";
+        }
+      );
+    }
+  }
+
+  function initiateMomo() {
+    const num = document.getElementById('momo-number').value;
+    const addr = document.getElementById('manual-address').value;
+    const size = document.getElementById('order-size').value;
+    const gpsLink = document.getElementById('coords-link').value;
+    if(!num || !addr || !size) { alert("Please complete details"); return; }
+    const items = cart.map(i => `- ${i.name} (x${i.qty})`).join('%0A');
+    const locationText = gpsLink ? `%0A%0A*GPS Location:* ${gpsLink}` : "";
+    const msg = `*NEW ORDER*%0A${items}%0A%0A*Total:* ${document.getElementById('cart-total').innerText}%0A*Size:* ${size}%0A*Delivery:* ${addr}${locationText}`;
+    window.location.href = `https://wa.me/${myWhatsAppNumber}?text=${msg}`;
+  }
+  
+  let locationCaptured = false;
+
+function getLocation() {
+  const status = document.getElementById('location-status');
+  const btn = document.getElementById('location-btn');
+
+  if (navigator.geolocation) {
+    status.innerText = "Accessing GPS...";
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        // Create a Google Maps link
+        document.getElementById('coords-link').value = `https://www.google.com/maps?q=${lat},${lon}`;
+        status.innerText = "Location Pinned ✓";
+        status.style.color = "#d4af37";
+        btn.style.background = "rgba(212, 175, 55, 0.1)";
+        locationCaptured = true;
+      },
+      () => {
+        status.innerText = "Location denied. Please type address manually.";
+        status.style.color = "#ff4444";
+      }
+    );
+  } else {
+    status.innerText = "Geolocation not supported by browser.";
+  }
+}
+
+// Replace your existing initiateMomo function with this one:
+function initiateMomo() {
+  const num = document.getElementById('momo-number').value;
+  const addr = document.getElementById('manual-address').value;
+  const size = document.getElementById('order-size').value;
+  const gpsLink = document.getElementById('coords-link').value;
+
+  if(!num || !addr || !size) { 
+    alert("Please complete details"); 
+    return; 
+  }
+
+  const items = cart.map(i => `- ${i.name} (x${i.qty})`).join('%0A');
+  const locationText = gpsLink ? `%0A*GPS Link:* ${gpsLink}` : "%0A*GPS:* Not provided";
+  
+  const msg = `*NEW ORDER*%0A${items}%0A%0A*Total:* ${document.getElementById('cart-total').innerText}%0A*Size:* ${size}%0A*Delivery:* ${addr}${locationText}`;
+  
+  window.location.href = `https://wa.me/${myWhatsAppNumber}?text=${msg}`;
+}
+
+</script>
+
+</body>
+</html>
