@@ -19,10 +19,10 @@
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-    /* FIXED BIBLE VERSE: Moved to the very top edge */
+    /* BIBLE VERSE: Pinned high for balance */
     .bible-verse {
       position: absolute;
-      top: 20px; 
+      top: 25px; 
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -38,7 +38,7 @@
 
     .hero-video-container {
       position: relative;
-      height: 50vh; /* Increased height for better vertical balance */
+      height: 50vh;
       width: 100%;
       display: flex;
       align-items: center;
@@ -50,7 +50,7 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      margin-top: 80px; /* More space between verse and title */
+      margin-top: 80px; 
     }
 
     .hero-content h1 {
@@ -85,11 +85,28 @@
     }
 
     .product-card { 
+      position: relative;
       background: rgba(255,255,255,0.02);
       padding: 15px; 
       border: 1px solid rgba(212, 175, 55, 0.1); 
       transition: 0.4s;
       text-align: center;
+    }
+
+    /* BEST SELLER BADGE STYLE */
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #d4af37;
+      border: 1px solid #d4af37;
+      padding: 4px 10px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      z-index: 2;
     }
     
     .product-card:hover {
@@ -228,6 +245,7 @@
     </div>
 
     <div class="product-card">
+      <div class="badge">Best Seller</div>
       <div class="img-box"><img src="https://i.postimg.cc/FRFSdDHw/d051ff4f558f55bfc1ac89259c382b80.jpg"></div>
       <p class="product-title">AFTER DARK™ PYJAMA SET</p>
       <p class="price-tag">35,000 UGX</p>
